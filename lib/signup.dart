@@ -12,7 +12,8 @@ class _DropDownState extends State<SignupPage> {
   TextEditingController nameInput = TextEditingController();
   TextEditingController emailInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
-  String dropdownValue = 'Gender';
+  String dropdownValue = 'Male';
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,16 +87,24 @@ class _DropDownState extends State<SignupPage> {
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  child: DropdownButton<String>(
-                    hint: Text('Gender'),
-                    items: <String>['Male', 'Female'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (_) {},
-                  ),
+                  child: 
+                  DropdownButton<String>(
+    value: dropdownValue,
+    icon: const Icon(Icons.arrow_downward),
+    onChanged: (String? newValue) {
+      setState(() {
+        dropdownValue = newValue!;
+      });
+    },
+    items: <String>['Male', 'Female']
+      .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      })
+      .toList(),
+  )
                 ),
                 Container(
                     height: 50,
@@ -109,7 +118,16 @@ class _DropDownState extends State<SignupPage> {
                         // ignore: unused_local_variable
                         String? name = prefs.getString('name');
                         await prefs.setString('name', 'Some Value');
-                        print("Hello, $name");
+                       
+                       final snackBar = SnackBar(
+                            content: Text("$name have signed up successfully"),
+                        action: SnackBarAction(label: "Undo", onPressed: (){
+
+                        },),);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        print(nameInput.text);
+                        print(emailInput.text);
+                        print(passwordInput.text);
                       },
                     )),
               ],
